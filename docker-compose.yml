@@ -28,19 +28,6 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  # Divolte container
-  divolte:
-    image: divolte/divolte-collector
-    container_name: divolte
-    environment:
-      - DIVOLTE_KAFKA_BROKER_LIST=kafka:29092
-    volumes:
-      - ./conf/divolte/:/opt/divolte/divolte-collector/conf/
-    ports:
-      - 8290:8290
-    depends_on:
-      - kafka
-
   # Druid container
   druid:
     image: fokkodriesprong/docker-druid
@@ -58,10 +45,3 @@ services:
     container_name: superset
     ports:
       - 8088:8088
-
-  # Superset container
-  app:
-    build: app/
-    container_name: app
-    ports:
-      - 8090:8090

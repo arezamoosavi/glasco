@@ -30,12 +30,16 @@ services:
 
   # Druid container
   druid:
-    image: fokkodriesprong/docker-druid
+    build:
+      context: .
+      dockerfile: ./dockerfiles/druid/Dockerfile
     container_name: druid
     ports:
       - 8081:8081
       - 8082:8082
+      - 8083:8083
       - 8888:8888
+      - 8090:8090
     depends_on:
       - kafka
 
@@ -45,3 +49,14 @@ services:
     container_name: superset
     ports:
       - 8088:8088
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/jupyter/Dockerfile
+    volumes:
+      - ./notebooks:/notebooks
+    ports:
+      - "3333:3333"
+    command: sh /jupyter_run.sh
+    restart: unless-stopped
